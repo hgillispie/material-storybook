@@ -1,12 +1,7 @@
 import React from 'react';
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { createTheme } from '@mui/material/styles';
-import AppTheme from '../src/shared-theme/AppTheme';
 import ResizeObserverErrorBoundary from '../src/components/ResizeObserverErrorBoundary';
-
-// Apply ResizeObserver fix for containerized environments
 import '../src/utils/resizeObserverFix';
+import { ThemeProvider } from '../src/design-system/ThemeProvider';
 
 /** @type { import('@storybook/react').Preview } */
 const preview = {
@@ -21,14 +16,8 @@ const preview = {
     backgrounds: {
       default: 'light',
       values: [
-        {
-          name: 'light',
-          value: '#fafafa',
-        },
-        {
-          name: 'dark',
-          value: '#121212',
-        },
+        { name: 'light', value: '#fafafa' },
+        { name: 'dark', value: '#0b0b0c' },
       ],
     },
   },
@@ -47,35 +36,13 @@ const preview = {
   decorators: [
     (Story, context) => {
       const themeMode = context.globals.theme;
-      
-      // Create a theme that matches your main project
-      const theme = createTheme({
-        palette: {
-          mode: themeMode,
-          primary: {
-            main: '#1976d2',
-          },
-          background: {
-            default: themeMode === 'dark' ? '#121212' : '#fafafa',
-            paper: themeMode === 'dark' ? '#1e1e1e' : '#ffffff',
-          },
-        },
-      });
-
       return (
         <ResizeObserverErrorBoundary>
-          <AppTheme>
-            <ThemeProvider theme={theme}>
-              <CssBaseline enableColorScheme />
-              <div style={{ 
-                backgroundColor: themeMode === 'dark' ? '#121212' : '#fafafa',
-                minHeight: '100vh',
-                padding: '20px'
-              }}>
-                <Story />
-              </div>
-            </ThemeProvider>
-          </AppTheme>
+          <ThemeProvider mode={themeMode}>
+            <div style={{ minHeight: '100vh', padding: 20 }}>
+              <Story />
+            </div>
+          </ThemeProvider>
         </ResizeObserverErrorBoundary>
       );
     },
